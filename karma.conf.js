@@ -6,7 +6,7 @@ module.exports = config => {
   config.set({
     browserStack,
     customLaunchers: {
-      bs_ie_11: {
+      IE11: {
         base: "BrowserStack",
         browser: "IE",
         browser_version: "11.0",
@@ -14,7 +14,7 @@ module.exports = config => {
         os_version: "10"
       }
     },
-    browsers: isCI ? ["bs_ie_11"] : ["ChromeHeadless"],
+    browsers: isCI ? ["IE11"] : ["ChromeHeadless"],
     frameworks: ["mocha"],
     singleRun: true,
 
