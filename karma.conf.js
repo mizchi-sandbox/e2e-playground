@@ -13,9 +13,17 @@ module.exports = config => {
     logLevel: config.LOG_INFO,
 
     // target
-    preprocessors: { "test/*_test.ts": ["webpack"] },
+    preprocessors: {
+      "test/*_test.ts": ["webpack"],
+      "test-e2e/*_test.ts": ["webpack"]
+    },
     webpack: webpackConfig,
-    files: ["test/*_test.ts", "test/*_test.html"],
+    files: [
+      "test/*_test.ts",
+      "test/*_test.html",
+      "test-e2e/*_test.ts",
+      "test-e2e/*_test.html"
+    ],
     browsers: isCI ? ["IE11"] : ["ChromeHeadless"],
 
     browserStack: browserStackConfig,

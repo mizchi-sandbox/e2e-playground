@@ -90,3 +90,5 @@ typings/
 .dynamodb/
 
 browserstack.config.json
+
+dist
