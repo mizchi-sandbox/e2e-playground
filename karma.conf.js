@@ -1,10 +1,24 @@
-const webpack = require("webpack");
-const browserStack = require("./browserstack.config");
+const browserStackConfig = require("./browserstack.config");
+const webpackConfig = require("./webpack.config");
+
 const isCI = !!process.env.CI;
 
 module.exports = config => {
   config.set({
-    browserStack,
+    // karma settings
+    frameworks: ["mocha"],
+    reporters: ["mocha"],
+    singleRun: true,
+    colors: true,
+    logLevel: config.LOG_INFO,
+
+    // target
+    preprocessors: { "test/*_test.ts": ["webpack"] },
+    webpack: webpackConfig,
+    files: ["test/*_test.ts", "test/*_test.html"],
+    browsers: isCI ? ["IE11"] : ["ChromeHeadless"],
+
+    browserStack: browserStackConfig,
     customLaunchers: {
       IE11: {
         base: "BrowserStack",
@@ -13,45 +27,6 @@ module.exports = config => {
         os: "Windows",
         os_version: "10"
       }
-    },
-    browsers: isCI ? ["IE11"] : ["ChromeHeadless"],
-    frameworks: ["mocha"],
-    singleRun: true,
-
-    files: ["test/*_test.ts", "test/*_test.html"],
-
-    preprocessors: { "test/*_test.ts": ["webpack"] },
-
-    webpack: {
-      mode: process.env.WEBPACK_MODE || "production",
-      resolve: {
-        extensions: [".js", ".mjs", ".ts", ".tsx"]
-      },
-      module: {
-        rules: [
-          {
-            test: /\.tsx?$/,
-            use: [
-              {
-                loader: "ts-loader",
-                options: {
-                  transpileOnly: true
-                }
-              }
-            ]
-          }
-        ]
-      },
-      plugins: [
-        new webpack.DefinePlugin({
-          "process.env": {
-            CI: JSON.stringify(process.env.CI)
-          }
-        })
-      ]
-    },
-    reporters: ["mocha"],
-    colors: true,
-    logLevel: config.LOG_INFO
+    }
   });
 };
