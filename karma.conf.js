@@ -1,4 +1,8 @@
-const browserStackConfig = require("./browserstack.config");
+let browserStackConfig = {};
+try {
+  browserStackConfig = require("./browserstack.config");
+} catch (e) {}
+
 const webpackConfig = require("./webpack.config");
 
 const isBS = !!process.env.BROWSERSTACK;
