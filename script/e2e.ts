@@ -22,8 +22,12 @@ async function startServer() {
   });
 
   // ensure server ready
+  let retlyCount = 10;
   while (true) {
-    await new Promise(r => setTimeout(r, 300));
+    if (retlyCount < 1) {
+      throw new Error("Can not boot server");
+    }
+    await new Promise(r => setTimeout(r, 1500));
     try {
       const res = await axios.get(`${ASSET_HOST}health`);
       console.log("ready", res.data);
@@ -31,6 +35,7 @@ async function startServer() {
     } catch (e) {
       console.log("wait for server...");
     }
+    retlyCount--;
   }
   return () => {
     child_process.spawn("kill", [proc.pid]);
